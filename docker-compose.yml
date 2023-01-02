@@ -8,5 +8,6 @@ services:
       UPSTREAM: http://example.com
       MAX_SIZE: 500m
       ALLOWED_ORIGIN: https://example.com
+      PROXY_CACHE_VALID: 60m
     ports:
       - 8088:80/tcp
