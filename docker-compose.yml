@@ -3,11 +3,11 @@ version: "3.7"
 services:
   proxy:
     build: .
-    image: decentralize/caching-proxy
+    image: decentralize/caching-proxy:pr-5
     environment:
-      UPSTREAM: http://example.com
-      MAX_SIZE: 500m
-      ALLOWED_ORIGIN: https://example.com
+      UPSTREAM: https://deims.org
+      MAX_SIZE: 1g
+      ALLOWED_ORIGIN: https://deims.org
       PROXY_CACHE_VALID: 60m
     ports:
-      - 8088:80/tcp
+      - 8082:80/tcp
