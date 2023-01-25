@@ -3,7 +3,8 @@ version: "3.7"
 services:
   proxy:
     build: .
-    image: decentralize/caching-proxy:pr-5
+    #image: decentralize/caching-proxy:pr-5
+    image: ptagliolato/caching-proxy:v1
     environment:
       UPSTREAM: https://deims.org
       MAX_SIZE: 1g
