@@ -10,6 +10,7 @@ sed -i "s|\$MAX_INACTIVE|"${MAX_INACTIVE:-60m}"|" /etc/nginx/nginx.conf
 
 [[ -z "$PORT" ]] || sed -i "s|listen 80|listen "$PORT"|" /etc/nginx/nginx.conf
 
+timeout 10 curl -6 https://www.google.com -o /dev/null && sed 's/ipv6=off//g' -i /etc/nginx/nginx.conf
 
 if [[ "${PROXY_CACHE_VALID+x}" ]]; then
   PROXY_CACHE_VALID="proxy_cache_valid ${PROXY_CACHE_VALID};"
