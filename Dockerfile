@@ -8,4 +8,4 @@ COPY nginx.sh /etc/nginx/nginx.sh
 
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["sh", "nginx.sh"]
+CMD ["sh", "/nginx.sh"]
