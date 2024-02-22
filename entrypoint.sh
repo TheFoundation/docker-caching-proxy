@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+#set -euo pipefail
 
 sed -i "s|\$MAX_SIZE|"${MAX_SIZE:-10g}"|" /etc/nginx/nginx.conf
 REALUPSTREAM=$(echo "$UPSTREAM"|sed 's~https://~~g;s~http://~~g'|sed 's/\/.\+//g')
