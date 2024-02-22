@@ -10,6 +10,9 @@ sed -i "s|\$PROXY_READ_TIMEOUT|"${PROXY_READ_TIMEOUT:-120s}"|" /etc/nginx/nginx.
 sed -i "s|\$MAX_INACTIVE|"${MAX_INACTIVE:-60m}"|" /etc/nginx/nginx.conf
 
 echo "$UPSTREAM_PROTO"|grep -q ^$ && UPSTREAM_PROTO="https"
+sed -i "s|UPSTREAM_PROTO|"${UPSTREAM_PROTO}"|" /etc/nginx/nginx.conf
+
+
 echo "$MORE_UPSTREAMS"|sed 's/|/\n/g'|while read addserv;do 
 REALSRV=$(echo "$addsrv"|sed 's~https://~~g;s~http://~~g'|sed 's/\/.\+//g')
 sed -i 's|#more_backends|#more_backends\n     server '${REALUPSTREAM}";|g" /etc/nginx/nginx.conf
