@@ -8,6 +8,9 @@ sed -i "s|\$ALLOWED_ORIGIN|${ALLOWED_ORIGIN:-*}|" /etc/nginx/nginx.conf
 sed -i "s|\$PROXY_READ_TIMEOUT|${PROXY_READ_TIMEOUT:-120s}|" /etc/nginx/nginx.conf
 sed -i "s|\$MAX_INACTIVE|${MAX_INACTIVE:-60m}|" /etc/nginx/nginx.conf
 
+[[ -z "$PORT" ]] || sed -i "s|listen 80|listen "$PORT"|" /etc/nginx/nginx.conf
+
+
 if [[ "${PROXY_CACHE_VALID+x}" ]]; then
   PROXY_CACHE_VALID="proxy_cache_valid ${PROXY_CACHE_VALID};"
 fi
