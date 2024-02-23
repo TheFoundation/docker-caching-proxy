@@ -1,4 +1,4 @@
-listenaddr: 0.0.0.0:8080
+listenaddr: 0.0.0.0:65533
 
 # you can change domain name servers using
 dnslist: ["127.0.0.1","8.8.8.8", "4.2.2.4"]
