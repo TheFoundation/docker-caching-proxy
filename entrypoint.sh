@@ -4,6 +4,7 @@ INTPORT=65533
 echo "${UPSTREAM_PROTO}"|grep -q ^$ && UPSTREAM_PROTO="https"
 cat /rp.yaml |tee /rp2.yaml >> /rp1.yaml
 sed 's/65533/65534/g' -i /rp2.yaml
+(mkdir -p  /var/run/redis/ ;chmod ugo+rwx  /var/run/redis/ ) &
 
 sed -i "s|\$MAX_SIZE|"${MAX_SIZE:-10g}"|" /etc/nginx/nginx.conf
 REALUPSTREAM=$(echo "${UPSTREAM}"|sed 's~https://~~g;s~http://~~g'|sed 's/\/.\+//g')
@@ -40,7 +41,10 @@ echo "${MORE_UPSTREAMS}"|sed 's/|/\n/g'|while read addsrv;do
     echo '- address: '${UPSTREAM_PROTO}"://"${REALSRV}'
   weight: 2'|tee -a  /rp2.yaml /rp1.yaml 
 done
-[[ -z "$PORT" ]] || sed -i "s|listen 80|listen "$PORT"|" /etc/nginx/nginx.conf
+#[[ -z "$PORT" ]] || sed -i "s|listen 80|listen "$PORT"|" /etc/nginx/nginx.conf
+
+NGXPORT=8000
+sed -i "s|listen 80|listen "$NGXPORT"|" /etc/nginx/nginx.conf
 
 timeout 10 curl -6 https://www.google.com -o /dev/null && ( 
      sed 's/ipv6=off//g' -i /etc/nginx/nginx.conf
@@ -77,6 +81,16 @@ while (true);do
   /usr/local/bin/rp --config /rp2.yaml  serve ;sleep 3
 done &
 
+export UPSTREAM_URL="http://127.0.0.1:$NGXPORT"
+export LOG_LEVEL=warn
+#verbosity: trace, debug, info, warn, error, fatal, panic (default info)
+export=ATTEMPT_HTTP2=false
+export=TTL=2160m
+export=FRONTEND_URL=":"${PORT}
+export=BACKEND_URL=redis://var/run/redis/redis.sock
+while (true);do 
+  /usr/bin/cache-proxy ;sleep 3
+done &
 
 
 #exec "$@" 
