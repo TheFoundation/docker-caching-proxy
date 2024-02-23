@@ -1,10 +1,7 @@
 listenaddr: 127.0.0.1:65533
-
 # you can change domain name servers using
 dnslist: ["127.0.0.1","8.8.8.8", "4.2.2.4"]
-
+#targets:
+##- address: http://api.server1.com
+##  weight: 3
 targets:
-#- address: http://api.server1.com
-#  weight: 3
-#- address: http://api.server2.com
-#  weight: 2
