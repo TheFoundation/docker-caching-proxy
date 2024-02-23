@@ -8,11 +8,15 @@ WORKDIR /
 
 RUN mkdir /cache \
  && chown nginx /cache
+ RUN mkdir /redis \
+ && chown redis /cache
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY rp.yaml /rp.yaml
 
 COPY entrypoint.sh /usr/bin/entrypoint.sh
 COPY nginx.sh /nginx.sh
+COPY redis.conf /etc/redis.conf
+
 COPY unbound.conf /etc/unbound.conf
 RUN ls /
 ENTRYPOINT ["ash"]

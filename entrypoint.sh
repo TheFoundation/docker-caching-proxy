@@ -65,7 +65,7 @@ nginx -T|grep server
 /usr/local/bin/rp --config /rp1.yaml  serve &
 /usr/local/bin/rp --config /rp2.yaml  serve &
 while (true);do 
-redis-server --loglevel warning 
+redis-server --loglevel warning  /etc/redis.conf &
 sleep 3
 done
 #exec "$@" 
