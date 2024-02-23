@@ -4,10 +4,10 @@ FROM ahmdrz/rp:latest
 RUN apk add  --no-cache unbound wget bind-tools redis #nginx nginx-mod-http-redis2
 
 
-ENV NGINX_VERSION 1.25.2
+ENV NGINX_VERSION 1.21.1
 ENV HTTP_REDIS_VERSION 0.3.9
 
-RUN 
+
 RUN GPG_KEYS="B0F4253373F8F6F510D42178520A9993A1C052F8" \
 	&& export GNUPGHOME=/root/.gpg \
 	&& found=''; \
