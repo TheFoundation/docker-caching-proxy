@@ -3,24 +3,25 @@
 INTPORT=10000
 
 sed -i "s|\$MAX_SIZE|"${MAX_SIZE:-10g}"|" /etc/nginx/nginx.conf
-REALUPSTREAM=$(echo "$UPSTREAM"|sed 's~https://~~g;s~http://~~g'|sed 's/\/.\+//g')
-sed -i "s|MYUPSTREAM|"${REALUPSTREAM}"|g" /etc/nginx/nginx.conf
+REALUPSTREAM=$(echo "${UPSTREAM}"|sed 's~https://~~g;s~http://~~g'|sed 's/\/.\+//g')
+#sed -i "s|MYUPSTREAM|"${REALUPSTREAM}"|g" /etc/nginx/nginx.conf
+sed -i "s|MYUPSTREAM|"127.0.0.1"|g" /etc/nginx/nginx.conf
 sed -i "s|MYPORT|"${INTPORT}"|g" /etc/nginx/nginx.conf
-socat TCP-LISTEN:${INTPORT},fork,reuseaddr,bind=127.0.0.1 OPENSSL-CONNECT:$MYUPSTREAM.443,verify=0 & 
+socat "TCP-LISTEN:${INTPORT},fork,reuseaddr,bind=127.0.0.1" "OPENSSL-CONNECT:"${REALUPSTREAM}".443,verify=0" & 
 sed -i "s|\$GZIP|"${GZIP:-on}"|" /etc/nginx/nginx.conf
 sed -i "s|\$ALLOWED_ORIGIN|"${ALLOWED_ORIGIN:-*}"|" /etc/nginx/nginx.conf
 sed -i "s|\$PROXY_READ_TIMEOUT|"${PROXY_READ_TIMEOUT:-120s}"|" /etc/nginx/nginx.conf
 sed -i "s|\$MAX_INACTIVE|"${MAX_INACTIVE:-60m}"|" /etc/nginx/nginx.conf
 
-echo "$UPSTREAM_PROTO"|grep -q ^$ && UPSTREAM_PROTO="https"
+echo "${UPSTREAM}_PROTO"|grep -q ^$ && UPSTREAM_PROTO="https"
 sed -i "s|UPSTREAM_PROTO|"${UPSTREAM_PROTO}"|" /etc/nginx/nginx.conf
 
 
 echo "${MORE_UPSTREAMS}"|sed 's/|/\n/g'|while read addsrv;do 
     INTPORT=$(expr ${INTPORT} + 1)
-    REALSRV=$(echo "$addsrv"|sed 's~https://~~g;s~http://~~g'|sed 's/\/.\+//g')
-    sed -i 's|#more_backends|#more_backends\n     server '${REALUPSTREAM}":"$INTPORT";|g" /etc/nginx/nginx.conf
-    socat TCP-LISTEN:${INTPORT},fork,reuseaddr,bind=127.0.0.1 OPENSSL-CONNECT:$REALSRV.443,verify=0 & 
+    REALSRV=$(echo "${addsrv}"|sed 's~https://~~g;s~http://~~g'|sed 's/\/.\+//g')
+    sed -i 's|#more_backends|#more_backends\n     server }"127.0.0.1:'${INTPORT}";|g" /etc/nginx/nginx.conf
+    socat "TCP-LISTEN:${INTPORT},fork,reuseaddr,bind=127.0.0.1" "OPENSSL-CONNECT:${REALSRV}".443,verify=0" & 
 done
 [[ -z "$PORT" ]] || sed -i "s|listen 80|listen "$PORT"|" /etc/nginx/nginx.conf
 
