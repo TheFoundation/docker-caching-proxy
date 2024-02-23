@@ -64,5 +64,9 @@ nslookup $REALUPSTREAM 127.0.0.1
 nginx -T|grep server 
 /usr/local/bin/rp --config /rp1.yaml  serve &
 /usr/local/bin/rp --config /rp2.yaml  serve &
+while (true);do 
+redis-server --loglevel warning 
+sleep 3
+done
 #exec "$@" 
 ash /nginx.sh

@@ -1,5 +1,5 @@
 FROM ahmdrz/rp:latest
-RUN apk add nginx --no-cache unbound wget bind-tools
+RUN apk add nginx --no-cache unbound wget bind-tools redis
 #FROM nginx
 #RUN  apt-get update && apt-get -y install dnsutils socat unbound wget && apt-get clean all
 RUN wget -S -c https://www.internic.net/domain/named.cache -O /etc/unbound/root.hints
