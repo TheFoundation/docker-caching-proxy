@@ -95,7 +95,7 @@ export BACKEND_URL=redis://127.0.0.1:6379
 
 ls -lh1 /usr/bin/cache-proxy
 while (true);do 
-  /usr/bin/cache-proxy ;sleep 3
+  /usr/bin/cache-proxy 2>&1 |grep -v -e "HIT GET.*/healthcheck (200)" ;sleep 3
 done &
 
 
