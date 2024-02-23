@@ -38,7 +38,7 @@ timeout 10 curl -6 https://www.google.com -o /dev/null && (
 if [[ "${PROXY_CACHE_VALID+x}" ]]; then
   PROXY_CACHE_VALID="proxy_cache_valid ${PROXY_CACHE_VALID};"
 fi
-cat /etc/unbound.conf
+cat /etc/unbound.conf |nl
 sed -i "s|\$PROXY_CACHE_VALID|${PROXY_CACHE_VALID-}|" /etc/nginx/nginx.conf
 nginx -t || nginx -T
 nginx -t || exit 1
