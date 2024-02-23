@@ -8,7 +8,7 @@ REALUPSTREAM=$(echo "${UPSTREAM}"|sed 's~https://~~g;s~http://~~g'|sed 's/\/.\+/
 sed -i "s|MYUPSTREAM|"${REALUPSTREAM}"|g" /etc/nginx/nginx.conf
 sed -i "s|MYPORT|"${INTPORT}"|g" /etc/nginx/nginx.conf
 socat "TCP-LISTEN:${INTPORT},fork,reuseaddr,bind=127.0.0.1" "OPENSSL-CONNECT:${REALUPSTREAM}:443,verify=0" & 
-sed 's/#morezones/#morezones\n#local-zone: "'${REALUPSTREAM}'." redirect\nlocal-data: "'${REALUPSTREAM}'. A 127.0.0.1"/g' -i /etc/unbound.conf
+sed 's/#morezones/#morezones\n         private-domain: "'${REALUPSTREAM}'"\n         local-data: "'${REALUPSTREAM}'. A 127.0.0.1"/g' -i /etc/unbound.conf
 
 sed -i "s|\$GZIP|"${GZIP:-on}"|" /etc/nginx/nginx.conf
 sed -i "s|\$ALLOWED_ORIGIN|"${ALLOWED_ORIGIN:-*}"|" /etc/nginx/nginx.conf
@@ -24,7 +24,7 @@ echo "${MORE_UPSTREAMS}"|sed 's/|/\n/g'|while read addsrv;do
     INTPORT=$(expr ${INTPORT} + 1)
     REALSRV=$(echo "${addsrv}"|sed 's~https://~~g;s~http://~~g'|sed 's/\/.\+//g')
     sed -i 's|#more_backends|#more_backends\n     server '${REALSRV}':'${INTPORT}"  max_fails=2 fail_timeout=5s;|g" /etc/nginx/nginx.conf
-    sed 's/#morezones/#morezones\n#local-zone: "'${REALSRV}'." redirect\nlocal-data: "'${REALSRV}'. A 127.0.0.1"/g' -i /etc/unbound.conf
+    sed 's/#morezones/#morezones\n         private-domain: "'${REALSRV}'"\n         local-zone: "'${REALSRV}'." redirect\n         local-data: "'${REALSRV}'. A 127.0.0.1"/g' -i /etc/unbound.conf
     socat "TCP-LISTEN:${INTPORT},fork,reuseaddr,bind=127.0.0.1" "OPENSSL-CONNECT:${REALSRV}:443,verify=0" & 
 done
 [[ -z "$PORT" ]] || sed -i "s|listen 80|listen "$PORT"|" /etc/nginx/nginx.conf
