@@ -2,6 +2,7 @@
 #set -euo pipefail
 INTPORT=65533
 echo "${UPSTREAM_PROTO}"|grep -q ^$ && UPSTREAM_PROTO="https"
+
 cat /rp.yaml |tee /rp2.yaml >> /rp1.yaml
 sed 's/65533/65534/g' -i /rp2.yaml
 (mkdir -p  /var/run/redis/ ;chmod ugo+rwx  /var/run/redis/ ) &
@@ -10,7 +11,7 @@ sed -i "s|\$MAX_SIZE|"${MAX_SIZE:-10g}"|" /etc/nginx/nginx.conf
 REALUPSTREAM=$(echo "${UPSTREAM}"|sed 's~https://~~g;s~http://~~g'|sed 's/\/.\+//g')
 #sed -i "s|MYUPSTREAM|"${REALUPSTREAM}"|g" /etc/nginx/nginx.conf
 sed -i "s|MYUPSTREAM|127.0.0.1|g" /etc/nginx/nginx.conf
-sed -i 's~proxy_redirect default;~proxy_redirect default;\nproxy_redirect http://127.0.0.1:'${INTPORT}'/  https://$http_host/;\nproxy_redirect '${UPSTREAM_PROTO}'://'${REALUPSTREAM}'/  $http_host/;~g' /etc/nginx/nginx.conf
+sed -i 's~proxy_redirect default;~proxy_redirect default;\nproxy_redirect http://127.0.0.1:'${INTPORT}'/  $scheme$http_host/;\nproxy_redirect '${UPSTREAM_PROTO}'://'${REALUPSTREAM}'/  $scheme$http_host/;~g' /etc/nginx/nginx.conf
 sed -i "s|MYPORT|"${INTPORT}"|g" /etc/nginx/nginx.conf
 echo '- address: '${UPSTREAM_PROTO}"://"${REALUPSTREAM}'
   weight: 2'|tee -a  /rp2.yaml /rp1.yaml 
@@ -28,7 +29,7 @@ sed -i "s|UPSTREAM_PROTO|"${UPSTREAM_PROTO}"|" /etc/nginx/nginx.conf
 
 INTPORT=$(expr ${INTPORT} + 1)
 sed -i 's|#more_backends|#more_backends\n     server 127.0.0.1:'${INTPORT}"  max_fails=2 fail_timeout=5s;|g" /etc/nginx/nginx.conf
-sed -i 's~proxy_redirect default;~proxy_redirect default;\nproxy_redirect http://127.0.0.1:'${INTPORT}'/  /;~g' /etc/nginx/nginx.conf
+sed -i 's~proxy_redirect default;~proxy_redirect default;\nproxy_redirect http://127.0.0.1:'${INTPORT}'/  $scheme$http_host/;~g' /etc/nginx/nginx.conf
 
 echo "${MORE_UPSTREAMS}"|sed 's/|/\n/g'|while read addsrv;do 
     INTPORT=$(expr ${INTPORT} + 1)
@@ -36,7 +37,7 @@ echo "${MORE_UPSTREAMS}"|sed 's/|/\n/g'|while read addsrv;do
     # sed -i 's|#more_backends|#more_backends\n     server '${REALSRV}':'${INTPORT}"  max_fails=2 fail_timeout=5s;|g" /etc/nginx/nginx.conf
     #sed 's/#morezones/#morezones\n         private-domain: "'${REALSRV}'"\n         local-zone: "'${REALSRV}'." redirect\n         local-data: "'${REALSRV}'. A 127.0.0.1"/g' -i /etc/unbound.conf
     #socat "TCP-LISTEN:${INTPORT},fork,reuseaddr,bind=127.0.0.1" "OPENSSL-CONNECT:${REALSRV}:443,verify=0" & 
-   sed -i 's~proxy_redirect default;~proxy_redirect default;\nproxy_redirect '${UPSTREAM_PROTO}'://'${REALSRV}'/  /;~g' /etc/nginx/nginx.conf
+   sed -i 's~proxy_redirect default;~proxy_redirect default;\nproxy_redirect '${UPSTREAM_PROTO}'://'${REALSRV}'/  $scheme$http_host/;~g' /etc/nginx/nginx.conf
 
     echo '- address: '${UPSTREAM_PROTO}"://"${REALSRV}'
   weight: 2'|tee -a  /rp2.yaml /rp1.yaml 
