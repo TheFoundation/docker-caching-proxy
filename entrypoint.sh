@@ -21,7 +21,7 @@ sed -i "s|UPSTREAM_PROTO|"${UPSTREAM_PROTO}"|" /etc/nginx/nginx.conf
 echo "${MORE_UPSTREAMS}"|sed 's/|/\n/g'|while read addsrv;do 
     INTPORT=$(expr ${INTPORT} + 1)
     REALSRV=$(echo "${addsrv}"|sed 's~https://~~g;s~http://~~g'|sed 's/\/.\+//g')
-    sed -i 's|#more_backends|#more_backends\n     server '${REALSRV}':'${INTPORT}";|g" /etc/nginx/nginx.conf
+    sed -i 's|#more_backends|#more_backends\n     server '${REALSRV}':'${INTPORT}"  max_fails=2 fail_timeout=5s;|g" /etc/nginx/nginx.conf
     sed 's/#morezones/#morezones\nstub-zone:\n         name: "'${REALSRV}'"\n		 stub-addr: 127.0.0.1/g' -i /etc/unbound.conf
     socat "TCP-LISTEN:${INTPORT},fork,reuseaddr,bind=127.0.0.1" "OPENSSL-CONNECT:${REALSRV}:443,verify=0" & 
 done
