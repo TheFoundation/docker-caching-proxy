@@ -90,7 +90,7 @@ export ATTEMPT_HTTP2=false
 export TTL=2160m
 export FRONTEND_URL=":"${PORT}
 #export BACKEND_URL=redis://var/run/redis/redis.sock
-export BACKEND_URL=unix://var/run/redis/redis.sock
+export BACKEND_URL=redis-socket://var/run/redis/redis.sock
 
 ls -lh1 /usr/bin/cache-proxy
 while (true);do 
