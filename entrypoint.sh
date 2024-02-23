@@ -16,12 +16,11 @@ echo "$UPSTREAM_PROTO"|grep -q ^$ && UPSTREAM_PROTO="https"
 sed -i "s|UPSTREAM_PROTO|"${UPSTREAM_PROTO}"|" /etc/nginx/nginx.conf
 
 
-echo "${MORE_UPSTREAMS}"|sed 's/|/\n/g'|while read addserv;do 
-INTPORT=$(expr ${INTPORT} + 1)
-REALSRV=$(echo "$addsrv"|sed 's~https://~~g;s~http://~~g'|sed 's/\/.\+//g')
-sed -i 's|#more_backends|#more_backends\n     server '${REALUPSTREAM}":"$INTPORT";|g" /etc/nginx/nginx.conf
-socat TCP-LISTEN:${INTPORT},fork,reuseaddr,bind=127.0.0.1 OPENSSL-CONNECT:$REALSRV.443,verify=0 & 
-
+echo "${MORE_UPSTREAMS}"|sed 's/|/\n/g'|while read addsrv;do 
+    INTPORT=$(expr ${INTPORT} + 1)
+    REALSRV=$(echo "$addsrv"|sed 's~https://~~g;s~http://~~g'|sed 's/\/.\+//g')
+    sed -i 's|#more_backends|#more_backends\n     server '${REALUPSTREAM}":"$INTPORT";|g" /etc/nginx/nginx.conf
+    socat TCP-LISTEN:${INTPORT},fork,reuseaddr,bind=127.0.0.1 OPENSSL-CONNECT:$REALSRV.443,verify=0 & 
 done
 [[ -z "$PORT" ]] || sed -i "s|listen 80|listen "$PORT"|" /etc/nginx/nginx.conf
 
