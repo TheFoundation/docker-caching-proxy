@@ -62,7 +62,11 @@ sleep 1
 nslookup $REALUPSTREAM 127.0.0.1
 #nginx -T |grep listen
 nginx -T|grep server 
+while (true);do 
+  redis-server /etc/redis.conf ;sleep 3
+done &
 
+sleep 3;
 
 cat /rp1.yaml;sleep 0.5
 
@@ -75,9 +79,7 @@ while (true);do
   /usr/local/bin/rp --config /rp2.yaml  serve ;sleep 3
 done &
 
-while (true);do 
-  redis-server /etc/redis.conf ;sleep 3
-done &
+
 
 #exec "$@" 
 
