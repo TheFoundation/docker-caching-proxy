@@ -6,7 +6,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY entrypoint.sh /entrypoint.sh
 COPY nginx.sh /nginx.sh
 
-RUN apk add unbound
+RUN apt-get -y install unbound
 RUN wget -S https://www.internic.net/domain/named.cache -O /etc/unbound/root.hints
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["sh", "/nginx.sh"]
