@@ -24,7 +24,8 @@ RUN GPG_KEYS="B0F4253373F8F6F510D42178520A9993A1C052F8" \
 	( test -z "$found" &&  echo >&2 "error: failed to fetch GPG key $GPG_KEYS" &&  exit 1 ) || true  
 
 
-RUN ash -c "RUN mkdir -p /usr/src||true ;cd /usr/src/ ;git clone https://github.com/openresty/srcache-nginx-module.git /usr/src/srcache-nginx-module & git clone https://github.com/openresty/redis2-nginx-module.git;wait " && export GNUPGHOME=/root/.gpg && CONFIG="\
+RUN ash -c "RUN mkdir -p /usr/src||true ;cd /usr/src/ ;git clone https://github.com/openresty/srcache-nginx-module.git /usr/src/srcache-nginx-module & git clone https://github.com/openresty/redis2-nginx-module.git;wait "
+RUN export GNUPGHOME=/root/.gpg && CONFIG="\
 		--prefix=/etc/nginx \
 		--sbin-path=/usr/sbin/nginx \
 		--modules-path=/usr/lib/nginx/modules \
