@@ -15,5 +15,5 @@ COPY entrypoint.sh /usr/bin/entrypoint.sh
 COPY nginx.sh /nginx.sh
 COPY unbound.conf /etc/unbound.conf
 RUN ls /
-ENTRYPOINT ["sh"]
+ENTRYPOINT ["ash"]
 CMD ["/usr/bin/entrypoint.sh"]
