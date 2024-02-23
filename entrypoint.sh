@@ -25,7 +25,10 @@ socat TCP-LISTEN:${INTPORT},fork,reuseaddr,bind=127.0.0.1 OPENSSL-CONNECT:$REALS
 done
 [[ -z "$PORT" ]] || sed -i "s|listen 80|listen "$PORT"|" /etc/nginx/nginx.conf
 
-timeout 10 curl -6 https://www.google.com -o /dev/null && sed 's/ipv6=off//g' -i /etc/nginx/nginx.conf
+timeout 10 curl -6 https://www.google.com -o /dev/null && ( 
+     sed 's/ipv6=off//g' -i /etc/nginx/nginx.conf
+     sed 's~private-address: ::/0~#private-address: ::/0~g' /etc/unbound.conf
+)
 
 if [[ "${PROXY_CACHE_VALID+x}" ]]; then
   PROXY_CACHE_VALID="proxy_cache_valid ${PROXY_CACHE_VALID};"
