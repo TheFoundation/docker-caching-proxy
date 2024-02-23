@@ -9,7 +9,7 @@ ENV HTTP_REDIS_VERSION 0.3.9
 
 RUN 
 RUN GPG_KEYS="B0F4253373F8F6F510D42178520A9993A1C052F8" \
-	&& export GNUPGHOME="$(mktemp -d)" \
+	&& export GNUPGHOME=/root/.gpg \
 	&& found=''; \
 	for server in \
 		ha.pool.sks-keyservers.net \
@@ -23,7 +23,7 @@ RUN GPG_KEYS="B0F4253373F8F6F510D42178520A9993A1C052F8" \
 	( test -z "$found" &&  echo >&2 "error: failed to fetch GPG key $GPG_KEYS" &&  exit 1 ) || true  
 
 
-RUN CONFIG="\
+RUN export GNUPGHOME=/root/.gpg && CONFIG="\
 		--prefix=/etc/nginx \
 		--sbin-path=/usr/sbin/nginx \
 		--modules-path=/usr/lib/nginx/modules \
