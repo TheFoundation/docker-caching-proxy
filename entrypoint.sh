@@ -9,7 +9,7 @@ sed -i "s|\$MAX_SIZE|"${MAX_SIZE:-10g}"|" /etc/nginx/nginx.conf
 REALUPSTREAM=$(echo "${UPSTREAM}"|sed 's~https://~~g;s~http://~~g'|sed 's/\/.\+//g')
 #sed -i "s|MYUPSTREAM|"${REALUPSTREAM}"|g" /etc/nginx/nginx.conf
 sed -i "s|MYUPSTREAM|127.0.0.1|g" /etc/nginx/nginx.conf
-sed -i 's~proxy_redirect default;~proxy_redirect default;\nproxy_redirect http://127.0.0.1:'${INTPORT}'/  /;\nproxy_redirect '${UPSTREAM_PROTO}'://'${REALUPSTREAM}'/  /;~g' /etc/nginx/nginx.conf
+sed -i 's~proxy_redirect default;~proxy_redirect default;\nproxy_redirect http://127.0.0.1:'${INTPORT}'/  https://$http_host/;\nproxy_redirect '${UPSTREAM_PROTO}'://'${REALUPSTREAM}'/  $http_host/;~g' /etc/nginx/nginx.conf
 sed -i "s|MYPORT|"${INTPORT}"|g" /etc/nginx/nginx.conf
 echo '- address: '${UPSTREAM_PROTO}"://"${REALUPSTREAM}'
   weight: 2'|tee -a  /rp2.yaml /rp1.yaml 
@@ -59,7 +59,7 @@ sleep 1
 
 nslookup $REALUPSTREAM 127.0.0.1
 #nginx -T |grep listen
-nginx -T|grep server 
+nginx -T|grep -e server -e proxy_redirect
 while (true);do 
   redis-server /etc/redis.conf ;sleep 3
 done &
