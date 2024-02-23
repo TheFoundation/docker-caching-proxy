@@ -82,7 +82,7 @@ while (true);do
 done &
 
 export UPSTREAM_URL="http://127.0.0.1:$NGXPORT"
-export LOG_LEVEL=warn
+export LOG_LEVEL=info
 #verbosity: trace, debug, info, warn, error, fatal, panic (default info)
 export=ATTEMPT_HTTP2=false
 export=TTL=2160m
