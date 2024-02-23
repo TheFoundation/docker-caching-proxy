@@ -67,7 +67,7 @@ cat /tmp/rp1.yaml
 cat /tmp/rp2.yaml
 /usr/local/bin/rp --config /rp2.yaml  serve &
 while (true);do 
-redis-server --loglevel warning  /etc/redis.conf &
+redis-server /etc/redis.conf &
 sleep 3
 done
 #exec "$@" 
