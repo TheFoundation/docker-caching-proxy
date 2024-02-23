@@ -1,5 +1,5 @@
 FROM nginx
-RUN  apt-get update && apt-get -y install socat unbound wget && apt-get clean all
+RUN  apt-get update && apt-get -y install dnsutils socat unbound wget && apt-get clean all
 RUN wget -S -c https://www.internic.net/domain/named.cache -O /etc/unbound/root.hints
 
 RUN mkdir /cache \
