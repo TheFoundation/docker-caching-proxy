@@ -18,6 +18,8 @@ on:
 permissions:
   packages: write
 
+
+  
 env:
   REGISTRY_GITHUB: ghcr.io
   REGISTRY_DOCKER: index.docker.io
