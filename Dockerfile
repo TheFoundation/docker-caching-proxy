@@ -14,5 +14,6 @@ COPY rp.yaml /rp.yaml
 COPY entrypoint.sh /usr/bin/entrypoint.sh
 COPY nginx.sh /nginx.sh
 COPY unbound.conf /etc/unbound.conf
-ENTRYPOINT ["/usr/bin/entrypoint.sh"]
-CMD ["sh", "/nginx.sh"]
+RUN ls /
+ENTRYPOINT ["sh"]
+CMD ["/usr/bin/entrypoint.sh"]
