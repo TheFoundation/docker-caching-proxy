@@ -15,7 +15,7 @@ sed -i "s|UPSTREAM_PROTO|"${UPSTREAM_PROTO}"|" /etc/nginx/nginx.conf
 
 echo "$MORE_UPSTREAMS"|sed 's/|/\n/g'|while read addserv;do 
 REALSRV=$(echo "$addsrv"|sed 's~https://~~g;s~http://~~g'|sed 's/\/.\+//g')
-sed -i 's|#more_backends|#more_backends\n     server '${REALUPSTREAM}";|g" /etc/nginx/nginx.conf
+sed -i 's|#more_backends|#more_backends\n     server '${REALUPSTREAM}":443;|g" /etc/nginx/nginx.conf
 done
 [[ -z "$PORT" ]] || sed -i "s|listen 80|listen "$PORT"|" /etc/nginx/nginx.conf
 
