@@ -88,7 +88,7 @@ RUN export GNUPGHOME=/root/.gpg && CONFIG="\
 	&& curl -fSL http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc  -o nginx.tar.gz.asc \
 	&& curl -fSL https://people.freebsd.org/~osa/ngx_http_redis-$HTTP_REDIS_VERSION.tar.gz -o ngx_http_redis.tar.gz && \
 	gpg --batch --verify nginx.tar.gz.asc nginx.tar.gz || true \
-	&& rm -r "$GNUPGHOME" nginx.tar.gz.asc \
+	&& rm -r nginx.tar.gz.asc \
 	&& mkdir -p /usr/src \
 	&& tar -zxC /usr/src -f nginx.tar.gz \
 	&& rm nginx.tar.gz \
