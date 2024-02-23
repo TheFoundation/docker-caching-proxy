@@ -25,7 +25,7 @@ RUN GPG_KEYS="B0F4253373F8F6F510D42178520A9993A1C052F8" \
 	( test -z "$found" &&  echo >&2 "error: failed to fetch GPG key $GPG_KEYS" &&  exit 1 ) || true  
 
 
-RUN git clone https://github.com/openresty/srcache-nginx-module.git /usr/src/srcache-nginx-module
+RUN ash -c "cd /usr/src/ ;git clone https://github.com/openresty/srcache-nginx-module.git /usr/src/srcache-nginx-module & git clone https://github.com/openresty/redis2-nginx-module.git;wait "
 
 RUN export GNUPGHOME=/root/.gpg && CONFIG="\
 		--prefix=/etc/nginx \
@@ -72,6 +72,8 @@ RUN export GNUPGHOME=/root/.gpg && CONFIG="\
 		--with-file-aio \
 		--with-http_v2_module \
 		--add-module=/usr/src/ngx_http_redis-$HTTP_REDIS_VERSION \
+	    --add-module /usr/src/srcache-nginx-module \
+	    --add-module /usr/src/redis2-nginx-module
 	" \
 	&& addgroup -S nginx \
 	&& adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx \
