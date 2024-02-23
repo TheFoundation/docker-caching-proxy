@@ -26,4 +26,5 @@ if [[ "${PROXY_CACHE_VALID+x}" ]]; then
 fi
 sed -i "s|\$PROXY_CACHE_VALID|${PROXY_CACHE_VALID-}|" /etc/nginx/nginx.conf
 nginx -t || nginx -T
+
 exec "$@" 
