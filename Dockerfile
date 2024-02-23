@@ -99,7 +99,7 @@ RUN export GNUPGHOME=/root/.gpg && CONFIG="\
 	&& rm ngx_http_redis.tar.gz \
 	&& cd /usr/src/nginx-$NGINX_VERSION \
 	&& ./configure $CONFIG --with-debug \
-	&& make -j$(getconf _NPROCESSORS_ONLN) \
+	&& make -j$(($(getconf _NPROCESSORS_ONLN)*2-2)) \
 	&& mv objs/nginx objs/nginx-debug \
 	&& mv objs/ngx_http_xslt_filter_module.so objs/ngx_http_xslt_filter_module-debug.so \
 	&& mv objs/ngx_http_image_filter_module.so objs/ngx_http_image_filter_module-debug.so \
