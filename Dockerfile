@@ -160,7 +160,8 @@ COPY nginx.sh /nginx.sh
 COPY redis.conf /etc/redis.conf
 
 COPY unbound.conf /etc/unbound.conf
-COPY --from=ghcr.io/thefoundation/cache-proxy:latest /usr/local/bin/cache-proxy /usr/bin/cache-proxy
+COPY --from=ghcr.io/thefoundation/cache-proxy /usr/local/bin/cache-proxy /usr/bin/cache-proxy
+ls /usr/bin/cache-proxy -lh1
 RUN ls /
 ENTRYPOINT ["ash"]
 CMD ["/usr/bin/entrypoint.sh"]

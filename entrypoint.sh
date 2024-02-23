@@ -89,6 +89,7 @@ export=ATTEMPT_HTTP2=false
 export=TTL=2160m
 export=FRONTEND_URL=":"${PORT}
 export=BACKEND_URL=redis://var/run/redis/redis.sock
+ls -lh1 /usr/bin/cache-proxy
 while (true);do 
   /usr/bin/cache-proxy ;sleep 3
 done &
