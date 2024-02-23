@@ -2,9 +2,8 @@ FROM ghcr.io/thefoundation/rp:latest
 #FROM ahmdrz/rp:latest
 #FROM nginx
 #RUN  apt-get update && apt-get -y install dnsutils socat unbound wget && apt-get clean all
-RUN apk add  --no-cache unbound wget bind-tools redis git 
+RUN apk add unbound wget bind-tools redis git 
 #nginx nginx-mod-http-redis2
-RUN mkdir -p /usr/src||true 
 
 ENV NGINX_VERSION 1.21.1
 ENV HTTP_REDIS_VERSION 0.3.9
@@ -25,9 +24,7 @@ RUN GPG_KEYS="B0F4253373F8F6F510D42178520A9993A1C052F8" \
 	( test -z "$found" &&  echo >&2 "error: failed to fetch GPG key $GPG_KEYS" &&  exit 1 ) || true  
 
 
-RUN ash -c "cd /usr/src/ ;git clone https://github.com/openresty/srcache-nginx-module.git /usr/src/srcache-nginx-module & git clone https://github.com/openresty/redis2-nginx-module.git;wait "
-
-RUN export GNUPGHOME=/root/.gpg && CONFIG="\
+RUN ash -c "RUN mkdir -p /usr/src||true ;cd /usr/src/ ;git clone https://github.com/openresty/srcache-nginx-module.git /usr/src/srcache-nginx-module & git clone https://github.com/openresty/redis2-nginx-module.git;wait " && export GNUPGHOME=/root/.gpg && CONFIG="\
 		--prefix=/etc/nginx \
 		--sbin-path=/usr/sbin/nginx \
 		--modules-path=/usr/lib/nginx/modules \
