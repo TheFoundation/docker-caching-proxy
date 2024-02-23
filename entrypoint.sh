@@ -27,6 +27,6 @@ fi
 sed -i "s|\$PROXY_CACHE_VALID|${PROXY_CACHE_VALID-}|" /etc/nginx/nginx.conf
 nginx -t || nginx -T
 nginx -t || exit 1
-unbound -dd -c /etc/unbound.conf
+unbound -dd -c /etc/unbound.conf &
 sleep 1
 exec "$@" 
