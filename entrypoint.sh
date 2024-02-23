@@ -40,6 +40,9 @@ nginx -t || nginx -T
 nginx -t || exit 1
 unbound -dd -c /etc/unbound.conf &
 sleep 1
-nginx -T |grep listen
+
+nslookup $REALUPSTREAM 127.0.0.1
+#nginx -T |grep listen
 nginx -T|grep server 
+
 exec "$@" 
