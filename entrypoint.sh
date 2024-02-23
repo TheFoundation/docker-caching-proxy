@@ -5,7 +5,7 @@ INTPORT=10000
 sed -i "s|\$MAX_SIZE|"${MAX_SIZE:-10g}"|" /etc/nginx/nginx.conf
 REALUPSTREAM=$(echo "$UPSTREAM"|sed 's~https://~~g;s~http://~~g'|sed 's/\/.\+//g')
 sed -i "s|MYUPSTREAM|"${REALUPSTREAM}"|g" /etc/nginx/nginx.conf
-sed -i "s|MYUPSTREAM|"${INTPORT}"|g" /etc/nginx/nginx.conf
+sed -i "s|MYPORT|"${INTPORT}"|g" /etc/nginx/nginx.conf
 socat TCP-LISTEN:${INTPORT},fork,reuseaddr,bind=127.0.0.1 OPENSSL-CONNECT:$MYUPSTREAM.443,verify=0 & 
 sed -i "s|\$GZIP|"${GZIP:-on}"|" /etc/nginx/nginx.conf
 sed -i "s|\$ALLOWED_ORIGIN|"${ALLOWED_ORIGIN:-*}"|" /etc/nginx/nginx.conf
