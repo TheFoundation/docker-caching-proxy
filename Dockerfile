@@ -11,8 +11,8 @@ RUN mkdir /cache \
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY rp.yaml /rp.yaml
 
-COPY entrypoint.sh /entrypoint.sh
+COPY entrypoint.sh /usr/bin/entrypoint.sh
 COPY nginx.sh /nginx.sh
 COPY unbound.conf /etc/unbound.conf
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/entrypoint.sh"]
 CMD ["sh", "/nginx.sh"]
