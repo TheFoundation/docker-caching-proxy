@@ -144,7 +144,8 @@ RUN apk add unbound wget bind-tools redis git nginx nginx-mod-http-redis2
 #	&& ln -sf /dev/stderr /var/log/nginx/error.log
 #
 RUN wget -S -c https://www.internic.net/domain/named.cache -O /etc/unbound/root.hints
-COPY --from=ahmdrz/rp:latest /usr/local/bin/rp /usr/bin/rp
+#COPY --from=ahmdrz/rp:latest /usr/local/bin/rp /usr/bin/rp
+
 WORKDIR /
 
 RUN mkdir /cache \
