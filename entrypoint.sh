@@ -3,6 +3,10 @@
 INTPORT=65533
 echo "${UPSTREAM_PROTO}"|grep -q ^$ && UPSTREAM_PROTO="https"
 
+while (true);do 
+  redis-server /etc/redis.conf ;sleep 3
+done &
+
 cat /rp.yaml |tee /rp2.yaml >> /rp1.yaml
 sed 's/65533/65534/g' -i /rp2.yaml
 (mkdir -p  /var/run/redis/ ;chmod ugo+rwx  /var/run/redis/ ) &
@@ -65,9 +69,6 @@ sleep 1
 nslookup $REALUPSTREAM 127.0.0.1
 #nginx -T |grep listen
 nginx -T|grep -e server -e proxy_redirect
-while (true);do 
-  redis-server /etc/redis.conf ;sleep 3
-done &
 
 sleep 3;
 
