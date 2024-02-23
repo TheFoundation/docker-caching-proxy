@@ -4,8 +4,8 @@ FROM ahmdrz/rp:latest
 RUN apk add  --no-cache unbound wget bind-tools redis #nginx nginx-mod-http-redis2
 
 
-ENV NGINX_VERSION 1.12.1
-ENV HTTP_REDIS_VERSION 0.3.8
+ENV NGINX_VERSION 1.25.2
+ENV HTTP_REDIS_VERSION 0.3.9
 
 RUN 
 RUN GPG_KEYS="B0F4253373F8F6F510D42178520A9993A1C052F8" \
@@ -18,7 +18,7 @@ RUN GPG_KEYS="B0F4253373F8F6F510D42178520A9993A1C052F8" \
 		pgp.mit.edu \
 	; do \
 		echo "Fetching GPG key $GPG_KEYS from $server"; \
-		gpg --keyserver "$server" --keyserver-options timeout=10 --recv-keys $GPG_KEYS && found=yes && break; \
+		gpg --keyserver "$server" --keyserver-options timeout=10 --recv-keys "$GPG_KEYS" && found=yes && break; \
 	done && \
 	( test -z "$found" &&  echo >&2 "error: failed to fetch GPG key $GPG_KEYS" &&  exit 1 ) || true  
 
