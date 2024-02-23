@@ -64,12 +64,12 @@ nslookup $REALUPSTREAM 127.0.0.1
 nginx -T|grep server 
 
 
-cat /tmp/rp1.yaml;sleep 0.5
+cat /rp1.yaml;sleep 0.5
 
 while (true);do 
   /usr/local/bin/rp --config /rp1.yaml  serve ;sleep 3
 done &
-cat /tmp/rp2.yaml
+cat /rp2.yaml
 
 while (true);do 
   /usr/local/bin/rp --config /rp2.yaml  serve ;sleep 3
