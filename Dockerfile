@@ -71,9 +71,7 @@ RUN export GNUPGHOME=/root/.gpg && CONFIG="\
 		--with-compat \
 		--with-file-aio \
 		--with-http_v2_module \
-		--add-module=/usr/src/ngx_http_redis-$HTTP_REDIS_VERSION \
-	    --add-module /usr/src/srcache-nginx-module \
-	    --add-module /usr/src/redis2-nginx-module" \
+		--add-module=/usr/src/ngx_http_redis-$HTTP_REDIS_VERSION,/usr/src/srcache-nginx-module,/usr/src/redis2-nginx-module" \
 	&& addgroup -S nginx \
 	&& adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx \
 	&& apk add --no-cache --virtual .build-deps \
