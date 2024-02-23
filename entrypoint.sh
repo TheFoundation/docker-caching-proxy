@@ -12,7 +12,7 @@ sed -i "s|MYUPSTREAM|127.0.0.1|g" /etc/nginx/nginx.conf
 sed -i 's~proxy_redirect default;~proxy_redirect default;\nproxy_redirect http://127.0.0.1:'${INTPORT}'/  /;\nproxy_redirect '${UPSTREAM_PROTO}'://'${REALUPSTREAM}'/  /;~g' /etc/nginx/nginx.conf
 sed -i "s|MYPORT|"${INTPORT}"|g" /etc/nginx/nginx.conf
 echo '- address: '${UPSTREAM_PROTO}"://"${REALUPSTREAM}'
-  weight: 2'|tee /rp2.yaml >> /rp1.yaml
+  weight: 2'|tee -a  /rp2.yaml /rp1.yaml 
 #socat "TCP-LISTEN:${INTPORT},fork,reuseaddr,bind=127.0.0.1" "OPENSSL-CONNECT:${REALUPSTREAM}:443,verify=0" & 
 #sed 's/#morezones/#morezones\n         private-domain: "'${REALUPSTREAM}'"\n         local-data: "'${REALUPSTREAM}'. A 127.0.0.1"/g' -i /etc/unbound.conf
 
@@ -38,7 +38,7 @@ echo "${MORE_UPSTREAMS}"|sed 's/|/\n/g'|while read addsrv;do
    sed -i 's~proxy_redirect default;~proxy_redirect default;\nproxy_redirect '${UPSTREAM_PROTO}'://'${REALSRV}'/  /;~g' /etc/nginx/nginx.conf
 
     echo '- address: '${UPSTREAM_PROTO}"://"${REALSRV}'
-  weight: 2'|tee /rp2.yaml >> /rp1.yaml
+  weight: 2'|tee -a  /rp2.yaml /rp1.yaml 
 done
 [[ -z "$PORT" ]] || sed -i "s|listen 80|listen "$PORT"|" /etc/nginx/nginx.conf
 
