@@ -1,5 +1,7 @@
-FROM nginx
-RUN  apt-get update && apt-get -y install dnsutils socat unbound wget && apt-get clean all
+FROM ahmdrz/rp:latest
+RUN apk add --no-cache unbound wget bind-tools
+#FROM nginx
+#RUN  apt-get update && apt-get -y install dnsutils socat unbound wget && apt-get clean all
 RUN wget -S -c https://www.internic.net/domain/named.cache -O /etc/unbound/root.hints
 COPY --from=ahmdrz/rp:latest /usr/local/bin/rp /usr/bin/rp
 RUN mkdir /cache \
