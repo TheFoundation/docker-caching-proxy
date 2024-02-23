@@ -145,7 +145,6 @@ RUN apk add unbound wget bind-tools redis git nginx nginx-mod-http-redis2
 #
 RUN wget -S -c https://www.internic.net/domain/named.cache -O /etc/unbound/root.hints
 #COPY --from=ahmdrz/rp:latest /usr/local/bin/rp /usr/bin/rp
-
 WORKDIR /
 
 RUN mkdir /cache \
@@ -160,8 +159,7 @@ COPY nginx.sh /nginx.sh
 COPY redis.conf /etc/redis.conf
 
 COPY unbound.conf /etc/unbound.conf
-COPY --from=ghcr.io/thefoundation/cache-proxy /usr/local/bin/cache-proxy /usr/bin/cache-proxy
-RUN ls /usr/bin/cache-proxy -lh1
+COPY --from=ghcr.io/thefoundation/cache-proxy:latest /usr/local/bin/cache-proxy /usr/bin/cache-proxy
 RUN ls /
 ENTRYPOINT ["ash"]
 CMD ["/usr/bin/entrypoint.sh"]
