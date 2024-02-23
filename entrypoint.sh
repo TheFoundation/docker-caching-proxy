@@ -8,7 +8,6 @@ REALUPSTREAM=$(echo "${UPSTREAM}"|sed 's~https://~~g;s~http://~~g'|sed 's/\/.\+/
 sed -i "s|MYUPSTREAM|"${REALUPSTREAM}"|g" /etc/nginx/nginx.conf
 sed -i "s|MYPORT|"${INTPORT}"|g" /etc/nginx/nginx.conf
 socat "TCP-LISTEN:${INTPORT},fork,reuseaddr,bind=127.0.0.1" "OPENSSL-CONNECT:${REALUPSTREAM}:443,verify=0" & 
-sed 's/#morezones/#morezones\nstub-zone:\n         name: "'${REALUPSTREAM}'"\n		 stub-addr: 127.0.0.1/g' -i /etc/unbound.conf
 sed 's/#morezones/#morezones\nlocal-zone: "'${REALUPSTREAM}'." redirect\nlocal-data: "'${REALUPSTREAM}'. A 127.0.0.1"/g' -i /etc/unbound.conf
 
 sed -i "s|\$GZIP|"${GZIP:-on}"|" /etc/nginx/nginx.conf
