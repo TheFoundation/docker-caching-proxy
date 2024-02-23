@@ -7,7 +7,7 @@ REALUPSTREAM=$(echo "${UPSTREAM}"|sed 's~https://~~g;s~http://~~g'|sed 's/\/.\+/
 #sed -i "s|MYUPSTREAM|"${REALUPSTREAM}"|g" /etc/nginx/nginx.conf
 sed -i "s|MYUPSTREAM|"127.0.0.1"|g" /etc/nginx/nginx.conf
 sed -i "s|MYPORT|"${INTPORT}"|g" /etc/nginx/nginx.conf
-socat "TCP-LISTEN:${INTPORT},fork,reuseaddr,bind=127.0.0.1" "OPENSSL-CONNECT:"${REALUPSTREAM}".443,verify=0" & 
+socat "TCP-LISTEN:${INTPORT},fork,reuseaddr,bind=127.0.0.1" "OPENSSL-CONNECT:${REALUPSTREAM}.443,verify=0" & 
 sed -i "s|\$GZIP|"${GZIP:-on}"|" /etc/nginx/nginx.conf
 sed -i "s|\$ALLOWED_ORIGIN|"${ALLOWED_ORIGIN:-*}"|" /etc/nginx/nginx.conf
 sed -i "s|\$PROXY_READ_TIMEOUT|"${PROXY_READ_TIMEOUT:-120s}"|" /etc/nginx/nginx.conf
@@ -21,7 +21,7 @@ echo "${MORE_UPSTREAMS}"|sed 's/|/\n/g'|while read addsrv;do
     INTPORT=$(expr ${INTPORT} + 1)
     REALSRV=$(echo "${addsrv}"|sed 's~https://~~g;s~http://~~g'|sed 's/\/.\+//g')
     sed -i 's|#more_backends|#more_backends\n     server }"127.0.0.1:'${INTPORT}";|g" /etc/nginx/nginx.conf
-    socat "TCP-LISTEN:${INTPORT},fork,reuseaddr,bind=127.0.0.1" "OPENSSL-CONNECT:${REALSRV}".443,verify=0" & 
+    socat "TCP-LISTEN:${INTPORT},fork,reuseaddr,bind=127.0.0.1" "OPENSSL-CONNECT:${REALSRV}.443,verify=0" & 
 done
 [[ -z "$PORT" ]] || sed -i "s|listen 80|listen "$PORT"|" /etc/nginx/nginx.conf
 
