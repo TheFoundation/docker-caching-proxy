@@ -2,8 +2,7 @@ FROM ghcr.io/thefoundation/rp:latest
 #FROM ahmdrz/rp:latest
 #FROM nginx
 #RUN  apt-get update && apt-get -y install dnsutils socat unbound wget && apt-get clean all
-RUN apk add unbound wget bind-tools redis git 
-#nginx nginx-mod-http-redis2
+RUN apk add unbound wget bind-tools redis git nginx nginx-mod-http-redis2
 
 #ENV NGINX_VERSION 1.21.1
 #ENV HTTP_REDIS_VERSION 0.3.9
