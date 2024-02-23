@@ -2,9 +2,9 @@
 FROM ahmdrz/rp:latest
 #FROM nginx
 #RUN  apt-get update && apt-get -y install dnsutils socat unbound wget && apt-get clean all
-RUN mkdir -p /usr/src||true && apk add  --no-cache unbound wget bind-tools redis git 
+RUN apk add  --no-cache unbound wget bind-tools redis git 
 #nginx nginx-mod-http-redis2
-
+RUN mkdir -p /usr/src||true 
 
 ENV NGINX_VERSION 1.21.1
 ENV HTTP_REDIS_VERSION 0.3.9
